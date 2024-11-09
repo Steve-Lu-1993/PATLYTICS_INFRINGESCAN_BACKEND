@@ -1,0 +1,294 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {},
+		"securitySchemes": {
+			"api_key": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "patlytics_infringescan_backend",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"data": {
+										"properties": {
+											"mobile_phone": {
+												"type": "string"
+											},
+											"email": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"mobile_phone",
+											"email"
+										],
+										"type": "object"
+									}
+								},
+								"required": [
+									"data"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/company/list": {
+			"get": {
+				"operationId": "GetCompanies",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Company"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/company/{company_id}/products": {
+			"get": {
+				"operationId": "GetCompanyProducts",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Company"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "company_id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/comparison/getOrCreateComparison/{company_uuid}/{publication_number}": {
+			"get": {
+				"operationId": "GetOrCreateComparison",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Comparison"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "company_uuid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "publication_number",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/comparison/getOrCreateComparisonByUser/{user_uuid}/{company_uuid}/{publication_number}": {
+			"get": {
+				"operationId": "GetOrCreateComparisonByUser",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Comparison"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "user_uuid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "company_uuid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "publication_number",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/patent/list": {
+			"get": {
+				"operationId": "GetPatents",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Patent"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "keyword",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/patent/{publication_number}/detail": {
+			"get": {
+				"operationId": "GetPatentByPublicationNumber",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Patent"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "publication_number",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api"
+		}
+	]
+}

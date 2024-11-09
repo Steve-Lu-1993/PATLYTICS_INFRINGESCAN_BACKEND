@@ -1,0 +1,24 @@
+{
+  "entryFile": "src/app.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "src/**/*Controller.ts"
+  ],
+  "routes": {
+    "basePath": "/api",
+    "routesDir": "build",
+    "authenticationModule": "./src/middlewares/express/expressAuthentication.ts"
+  },
+  "spec": {
+    "basePath": "/api",
+    "securityDefinitions": {
+      "api_key": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "outputDirectory": "build",
+    "specVersion": 3
+  }
+}

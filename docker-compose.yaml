@@ -1,0 +1,38 @@
+services:
+  patlytics-mini-app-mysql:
+    image: mysql:8.0
+    platform: linux/amd64
+    container_name: patlytics-mini-app-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${DB_MYSQL_DATABASE}
+    ports:
+      - "7052:3306"
+    volumes:
+      - patlytics-mini-app-mysql-data:/var/lib/mysql
+    networks:
+      - docker_default
+
+  patlytics-mini-app-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
+    container_name: patlytics-mini-app-phpmyadmin
+    environment:
+      PMA_HOST: ${DB_MYSQL_HOST}
+      PMA_USER: ${DB_MYSQL_USERNAME}
+      PMA_PASSWORD: ${DB_MYSQL_PASSWORD}
+    ports:
+      - "7053:80"
+    depends_on:
+      - patlytics-mini-app-mysql
+    networks:
+      - docker_default
+
+volumes:
+  patlytics-mini-app-mysql-data:
+
+networks:
+  docker_default:
+    driver: bridge
+    # external: true
+    name: ${DOCKER_NETWORK_NAME}
