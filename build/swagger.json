@@ -53,7 +53,68 @@
 								"properties": {
 									"data": {
 										"properties": {
-											"mobile_phone": {
+											"password": {
+												"type": "string"
+											},
+											"email": {
+												"type": "string"
+											},
+											"last_name": {
+												"type": "string"
+											},
+											"first_name": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"password",
+											"email",
+											"last_name",
+											"first_name"
+										],
+										"type": "object"
+									}
+								},
+								"required": [
+									"data"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"data": {
+										"properties": {
+											"password": {
 												"type": "string"
 											},
 											"email": {
@@ -61,7 +122,7 @@
 											}
 										},
 										"required": [
-											"mobile_phone",
+											"password",
 											"email"
 										],
 										"type": "object"
@@ -69,6 +130,47 @@
 								},
 								"required": [
 									"data"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/refreshToken": {
+			"post": {
+				"operationId": "RefreshToken",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"refreshToken": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"refreshToken"
 								],
 								"type": "object"
 							}
@@ -133,8 +235,40 @@
 				]
 			}
 		},
-		"/comparison/getOrCreateComparison/{company_uuid}/{publication_number}": {
+		"/comparison/getComparisonByUuid/{uuid}": {
 			"get": {
+				"operationId": "GetComparisonByUuid",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"Comparison"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "uuid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/comparison/getOrCreateComparison": {
+			"post": {
 				"operationId": "GetOrCreateComparison",
 				"responses": {
 					"200": {
@@ -153,28 +287,41 @@
 					"Comparison"
 				],
 				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "company_uuid",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"in": "path",
-						"name": "publication_number",
-						"required": true,
-						"schema": {
-							"type": "string"
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"data": {
+										"properties": {
+											"publication_number": {
+												"type": "string"
+											},
+											"company_uuid": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"publication_number",
+											"company_uuid"
+										],
+										"type": "object"
+									}
+								},
+								"required": [
+									"data"
+								],
+								"type": "object"
+							}
 						}
 					}
-				]
+				}
 			}
 		},
-		"/comparison/getOrCreateComparisonByUser/{user_uuid}/{company_uuid}/{publication_number}": {
-			"get": {
+		"/comparison/getOrCreateComparisonByUser": {
+			"post": {
 				"operationId": "GetOrCreateComparisonByUser",
 				"responses": {
 					"200": {
@@ -192,33 +339,42 @@
 				"tags": [
 					"Comparison"
 				],
-				"security": [],
-				"parameters": [
+				"security": [
 					{
-						"in": "path",
-						"name": "user_uuid",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"in": "path",
-						"name": "company_uuid",
-						"required": true,
-						"schema": {
-							"type": "string"
-						}
-					},
-					{
-						"in": "path",
-						"name": "publication_number",
-						"required": true,
-						"schema": {
-							"type": "string"
+						"api_key": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"data": {
+										"properties": {
+											"publication_number": {
+												"type": "string"
+											},
+											"company_uuid": {
+												"type": "string"
+											}
+										},
+										"required": [
+											"publication_number",
+											"company_uuid"
+										],
+										"type": "object"
+									}
+								},
+								"required": [
+									"data"
+								],
+								"type": "object"
+							}
 						}
 					}
-				]
+				}
 			}
 		},
 		"/patent/list": {
@@ -283,6 +439,60 @@
 						}
 					}
 				]
+			}
+		},
+		"/userComparison/user/list": {
+			"get": {
+				"operationId": "GetListByUserUuid",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"UserComparison"
+				],
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/user": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"200": {
+						"description": "Success",
+						"content": {
+							"application/json": {
+								"schema": {}
+							}
+						}
+					},
+					"500": {
+						"description": "Error"
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"api_key": []
+					}
+				],
+				"parameters": []
 			}
 		}
 	},

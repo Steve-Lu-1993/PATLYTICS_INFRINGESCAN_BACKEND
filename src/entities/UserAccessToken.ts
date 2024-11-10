@@ -5,11 +5,12 @@ import {
     ManyToOne,
     BeforeInsert,
     JoinColumn,
+    OneToOne,
   } from "typeorm";
   import { User } from "./User";
   
-  @Entity('otp_verification')
-  export class OtpVerification {
+  @Entity('user_access_token')
+  export class UserAccessToken {
     @PrimaryGeneratedColumn()
     id!: number;
   
@@ -25,30 +26,24 @@ import {
     @Column({ type: "longtext", nullable: true })
     settings!: string;
   
-    @ManyToOne(() => User, (user) => user.otp_verifications)
+    @OneToOne(() => User)
     @JoinColumn({ name: "user_id" })
     user!: User;
   
-    @Column({ type: "int" })
+    @Column({ type: "int" ,unique: true })
     user_id!: number;
   
-    @Column({type: "varchar" })
-    code!: string;
+    @Column({ type: "varchar", length: 255 })
+    access_token!: string;
   
-    @Column({type:"enum", enum:["email", "phone"]})
-    type!: string;
-  
-    @Column({ type: "enum", enum: ["register", "login", "reset_password"] })
-    action!: string;
-  
-    @Column({type: "boolean"})
-    is_valid!: boolean;
-  
-    @Column({ type: "bigint", nullable: true })
-    verified_at?: number;
+    @Column({ type: "varchar", length: 255 })
+    refresh_token!: string;
   
     @Column({ type: "bigint" })
-    expires_at!: number;
+    access_token_expires_at!: number;
+  
+    @Column({ type: "bigint" })
+    refresh_token_expires_at!: number;
   
     @BeforeInsert()
     setTimestamps() {

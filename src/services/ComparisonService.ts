@@ -18,6 +18,19 @@ export class ComparisonService {
     private userComparisonDao = new GenericDAO_TypeORM<UserComparison>("user_comparison");
     private openAiLMService = new OpenAiLMService();
 
+    public async getComparisonByUuid(uuid: string): Promise<ServiceRes<PatentCompanyComparison>> {
+        const functionName = "getComparisonByUuid";
+        try {
+            const comparison = await this.comparisonDao.read({ filters: { uuid },relations:["patent","company"] });
+            if (!comparison) {
+                return { status: 0, message: "comparison_not_found" };
+            }
+            return { status: 1, message: "comparison_found", data: comparison };
+        } catch (error: any) {
+            return { status: 0, message: `${this.serviceName}.${functionName}: ${error.message}` };
+        }
+    }
+
     public async getOrCreateComparisonByUser(user_uuid:string,company_uuid:string,publication_number:string):Promise<ServiceRes<{comparison:PatentCompanyComparison,company:Company,patent:Patent}>>{
         const functionName = "getOrCreateComparisonByUser";
 

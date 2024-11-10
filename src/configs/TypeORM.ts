@@ -1,11 +1,11 @@
 import { DataSource } from "typeorm";
 import { User } from "../entities/User";
-import { OtpVerification } from "../entities/OtpVerification";
 import { Company } from "../entities/Company";
 import { Patent } from "../entities/Patent";
 import { PatentCompanyComparison } from "../entities/PatentCompanyComparison";
 import { Product } from "../entities/Product";
 import { UserComparison } from "../entities/UserComparison";
+import { UserAccessToken } from "../entities/UserAccessToken";
 
 require("dotenv").config();
 
@@ -24,11 +24,11 @@ export const AppDataSource = new DataSource({
   logging: false,
   entities: [
     Company,
-    OtpVerification,
     Patent,
     PatentCompanyComparison,
     Product,
     User,
+    UserAccessToken,
     UserComparison
   ],
   subscribers: [],

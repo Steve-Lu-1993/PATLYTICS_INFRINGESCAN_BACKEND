@@ -15,6 +15,7 @@ import {
   Tags,
   Header,
 } from "@tsoa/runtime";
+import express from "express";
 import { ComparisonService } from "../services/ComparisonService";
 
 @Route("comparison")
@@ -22,27 +23,42 @@ import { ComparisonService } from "../services/ComparisonService";
 export class ComparisonController extends Controller {
   @SuccessResponse("200", "Success")
   @Response("500", "Error")
-  @Get("/getOrCreateComparison/{company_uuid}/{publication_number}")
+  @Get("/getComparisonByUuid/{uuid}")
+  public async getComparisonByUuid(@Path() uuid: string): Promise<any> {
+    return await new ComparisonService().getComparisonByUuid(uuid);
+  }
+
+  @SuccessResponse("200", "Success")
+  @Response("500", "Error")
+  @Post("/getOrCreateComparison")
   public async getOrCreateComparison(
-    @Path() company_uuid: string,
-    @Path() publication_number: string
+    @Body()
+    reqBody: {
+      data: { company_uuid: string; publication_number: string };
+    }
   ): Promise<any> {
     return await new ComparisonService().getOrCreateComparison(
-      company_uuid,
-      publication_number
+      reqBody.data.company_uuid,
+      reqBody.data.publication_number
     );
   }
 
   @SuccessResponse("200", "Success")
   @Response("500", "Error")
-  @Get( "/getOrCreateComparisonByUser/{user_uuid}/{company_uuid}/{publication_number}" )
+  @Security("api_key")
+  @Post("/getOrCreateComparisonByUser")
   public async getOrCreateComparisonByUser(
-    @Path() user_uuid: string,
-    @Path() company_uuid: string,
-    @Path() publication_number: string
+    @Request() request: express.Request,
+    @Body()
+    reqBody: { data: { company_uuid: string; publication_number: string } }
   ): Promise<any> {
+    const { data } = reqBody;
+    const { company_uuid, publication_number } = data;
+
+    const user = request.user as { uuid: string; iat: number; exp: number };
+
     return await new ComparisonService().getOrCreateComparisonByUser(
-      user_uuid,
+      user.uuid,
       company_uuid,
       publication_number
     );

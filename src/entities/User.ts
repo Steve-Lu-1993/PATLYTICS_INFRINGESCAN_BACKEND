@@ -9,7 +9,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { OtpVerification } from "./OtpVerification";
 import { UserComparison } from "./UserComparison";
 
 @Entity("user")
@@ -31,10 +30,7 @@ export class User {
   deleted_at?: number;
 
   @Column({ type: "longtext", nullable: true })
-  settings!: string;
-
-  @OneToMany(() => OtpVerification, (otpVerification) => otpVerification.user)
-  otp_verifications!: OtpVerification[];
+  settings!: string;;
 
   @OneToMany(() => UserComparison, (userComparison) => userComparison.user)
   user_comparisons!: UserComparison[];
@@ -57,6 +53,9 @@ export class User {
 
   @Column({ type: "varchar", unique: true, length: 255 })
   email!: string;
+
+  @Column({ type: "varchar"})
+  password!: string;
 
   @Column({ type: "bigint", nullable: true })
   last_login_at!: number;

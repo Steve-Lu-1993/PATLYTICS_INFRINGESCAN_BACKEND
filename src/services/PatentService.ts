@@ -41,6 +41,10 @@ export class PatentService {
         return { status: 0, message: "patents_lookup_failed" };
       }
 
+      if(patents.length === 0){
+        return { status: 0, message: "no_match_patents_found" };
+      }
+
       return { status: 1, message: "patents_found", data: patents };
     } catch (error: any) {
       return { status: 0, message: `${this.serviceName}.${functionName}: ${error.message}` };
