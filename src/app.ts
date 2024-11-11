@@ -8,9 +8,9 @@ import "reflect-metadata";
 import { RegisterRoutes } from "../build/routes";
 import { AppDataSource } from "./configs/TypeORM";
 import { initializeTypeORMDatabase } from "./utilis/initDatabase";
+import dotenv from "dotenv";
 
-
-require("dotenv").config();
+dotenv.config();
 
 const { NODE_ENV,PORT, BASE_PATH,FRONTEND_BASE_URL,JWT_SECRET,REFRESH_TOKEN_SECRET,RATE_LIMIT,TRUST_PROXY } = process.env;
 console.log("NODE_ENV:", NODE_ENV);

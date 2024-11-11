@@ -1,5 +1,8 @@
 import axios from "axios";
-require("dotenv").config();
+import { ServiceRes } from "../../../types/GenericTypes";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const API_KEY = process.env.OPENAI_LLM_API_KEY;
 const BASE_URL = "https://api.openai.com/v1/chat/completions";
@@ -41,15 +44,14 @@ export class OpenAiLMService {
     patent_description: string,
     company_products: { id: number; name: string; description: string }[],
     model: string = "gpt-4o-mini"
-  ): Promise<any[]> {
+  ): Promise<ServiceRes<any[]>> {
     const prompt = `Analyze the provided company product list for potential patent infringement and return result with array object in json format,
                     each object like {"id":1,"name":"Product One","description":"some product description","infringement_reason":"some reason"}\n\n
                     *if product doesn't potentially infringe the patent, don't list the product in result.\n\n
                     ##ProductList\n\n${JSON.stringify(company_products)}\n\n
                     ##PatentDescription\n\n${patent_description}`;
 
-    console.log("Prompt:", prompt);
-
+    
     const requestBody = {
       model,
       messages: [
@@ -81,13 +83,12 @@ export class OpenAiLMService {
         const summary = response.data.choices[0].message.content.trim();
         const results = this.extractFirstJSON(summary);
 
-        return results;
+        return { status: 1, message: "generate_summary_success", data: results };
       } else {
-        throw new Error("generate_summary_failed");
+        return { status: 0, message: `generate_summary_failed${response}` };
       }
     } catch (error: any) {
-      console.error( "generate_summary_error", error.response ? error.response.data : error.message );
-      throw error;
+      return { status: 0, message: `generate_summary_failed_with_error: ${error.message}` };
     }
   }
 }

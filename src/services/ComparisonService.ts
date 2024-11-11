@@ -42,7 +42,7 @@ export class ComparisonService {
 
            const comparison = await this.getOrCreateComparison(company_uuid,publication_number)
               if(comparison.status === 0 || comparison.data === undefined){
-                return {status:0,message:"comparison_not_found"}
+                return {status:0,message:`comparison_not_found_or_creation_failed:${comparison.message}`}
               }
             const userComparison = await this.userComparisonDao.read({filters:{user_id:user.id,patent_company_comparison_id:comparison.data.comparison.id}})
             if(!userComparison){
@@ -76,7 +76,7 @@ export class ComparisonService {
             if (!comparison) {
                 const newComparison = await this.createComparison(company_uuid, publication_number);
                 if (newComparison.status === 0 || newComparison.data === undefined) {
-                    return { status: 0, message: "comparison_creation_failed" };
+                    return { status: 0, message: `comparison_creation_failed:${newComparison.message}}` };
                 }
                 return { status: 1, message: "comparison_created", data: { comparison: newComparison.data, company, patent } };
             }
@@ -107,15 +107,18 @@ export class ComparisonService {
             }
 
             const aiComparison = await this.openAiLMService.getComparisonResult(patent.description,companyProducts)
+            if (aiComparison.status === 0 || aiComparison.data === undefined) {
+                return { status: 0, message: `ai_comparison_failed:${aiComparison.message}` };
+            }
 
-            const productIds = aiComparison.map(product => product.id);
+            const productIds = aiComparison.data.map(product => product.id);
             const newComparison:Partial<PatentCompanyComparison> = {
                 // created_at:Date.now(),
                 // updated_at:Date.now(),
                 uuid:randomUUID(),
                 company_id:company.id,
                 patent_id:patent.id,
-                comparison_results:aiComparison,
+                comparison_results:aiComparison.data,
                 potential_infringement_product_ids:productIds
             }
             console.log("newComparison",newComparison)
