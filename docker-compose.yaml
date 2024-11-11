@@ -1,22 +1,45 @@
 services:
-  patlytics-mini-app-mysql:
+  patlytics-inf-api:
+    container_name: patlytics-inf-api
+    build:
+      context: .
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      BASE_PATH: ${BASE_PATH}
+      PORT: ${PORT}
+      RATE_LIMIT: ${RATE_LIMIT}
+      TRUST_PROXY: ${TRUST_PROXY}
+      DB_MYSQL_HOST: ${DB_MYSQL_HOST}
+      DB_MYSQL_PORT: ${DB_MYSQL_PORT}
+      DB_MYSQL_DATABASE: ${DB_MYSQL_DATABASE}
+      DB_MYSQL_USERNAME: ${DB_MYSQL_USERNAME}
+      DB_MYSQL_PASSWORD: ${DB_MYSQL_PASSWORD}
+      FRONTEND_BASE_URL: ${FRONTEND_BASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      REFRESH_TOKEN_SECRET: ${REFRESH_TOKEN_SECRET}
+      OPENAI_LLM_API_KEY: ${OPENAI_LLM_API_KEY}
+    ports:
+      - "8060:8060"
+    networks:
+      - docker_default
+
+
+  patlytics-inf-mysql:
     image: mysql:8.0
-    platform: linux/amd64
-    container_name: patlytics-mini-app-mysql
+    container_name: patlytics-inf-mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD}
       MYSQL_DATABASE: ${DB_MYSQL_DATABASE}
     ports:
-      - "7052:3306"
+      - "3306"
     volumes:
-      - patlytics-mini-app-mysql-data:/var/lib/mysql
+      - patlytics-inf-mysql-data:/var/lib/mysql
     networks:
       - docker_default
 
-  patlytics-mini-app-phpmyadmin:
+  patlytics-inf-phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    platform: linux/amd64
-    container_name: patlytics-mini-app-phpmyadmin
+    container_name: patlytics-inf-phpmyadmin
     environment:
       PMA_HOST: ${DB_MYSQL_HOST}
       PMA_USER: ${DB_MYSQL_USERNAME}
@@ -24,15 +47,14 @@ services:
     ports:
       - "7053:80"
     depends_on:
-      - patlytics-mini-app-mysql
+      - patlytics-inf-mysql
     networks:
       - docker_default
 
 volumes:
-  patlytics-mini-app-mysql-data:
+  patlytics-inf-mysql-data:
 
 networks:
   docker_default:
     driver: bridge
-    # external: true
     name: ${DOCKER_NETWORK_NAME}

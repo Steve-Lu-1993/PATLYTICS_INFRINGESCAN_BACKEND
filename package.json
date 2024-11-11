@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently --kill-others \"ts-node-dev --respawn --transpile-only -r dotenv/config src/app.ts dotenv_config_path=.local.env\" \"nodemon -e ts -x 'npm run swagger'\"",
-    "build": "npm run generate-tsoa-config && npx esbuild src/app.ts --bundle --minify --sourcemap --outfile=dist/app.min.js --platform=node --target=node20 --tsconfig=tsconfig.json --external:typeorm --external:mongoose --external:swagger-ui-express --external:swagger-ui-dist",
+    "build": "npm run generate-tsoa-config && npx esbuild-wasm src/app.ts --bundle --minify --sourcemap --outfile=dist/app.min.js --platform=node --target=node20 --tsconfig=tsconfig.json --external:typeorm --external:mongoose --external:swagger-ui-express --external:swagger-ui-dist",
     "start": "node dist/app.min.js",
     "swagger": "npm run generate-tsoa-config && tsoa spec-and-routes",
     "generate-tsoa-config": "node generateTsoaConfig.js"
@@ -58,6 +58,7 @@
     "@types/nodemailer": "^6.4.16",
     "@types/papaparse": "^5.3.15",
     "esbuild": "^0.24.0",
+    "esbuild-wasm": "^0.24.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.6.3"

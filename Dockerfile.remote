@@ -1,18 +1,12 @@
-FROM node:20.13-bullseye AS builder
-
-RUN apt-get update && apt-get install -y golang build-essential
+FROM --platform=linux/amd64 node:20.13-alpine AS builder
 
 WORKDIR /app
 
 COPY package*.json ./
 
-ENV ESBUILD_BUILD_FROM_SOURCE=true
-
 RUN npm install
 
 COPY . .
-
-RUN cat tsconfig.json
 
 ARG BASE_PATH
 ENV BASE_PATH=${BASE_PATH}
@@ -21,7 +15,7 @@ RUN npm run swagger
 
 RUN npm run build
 
-FROM node:20.13-bullseye
+FROM --platform=linux/amd64 node:20.13-alpine
 
 WORKDIR /app
 
