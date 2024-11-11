@@ -111,17 +111,15 @@ export class ComparisonService {
                 return { status: 0, message: `ai_comparison_failed:${aiComparison.message}` };
             }
 
-            const productIds = aiComparison.data.map(product => product.id);
+            const productIds = aiComparison.data.length > 0? aiComparison.data.map(product => product.id):[];
             const newComparison:Partial<PatentCompanyComparison> = {
-                // created_at:Date.now(),
-                // updated_at:Date.now(),
                 uuid:randomUUID(),
                 company_id:company.id,
                 patent_id:patent.id,
                 comparison_results:aiComparison.data,
                 potential_infringement_product_ids:productIds
             }
-            console.log("newComparison",newComparison)
+
             const comparison = await this.comparisonDao.create(newComparison);
             if (!comparison) {
                 return { status: 0, message: "comparison_creation_failed" };
