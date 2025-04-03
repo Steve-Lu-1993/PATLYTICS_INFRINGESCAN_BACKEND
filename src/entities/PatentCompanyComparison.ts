@@ -58,8 +58,11 @@ export class PatentCompanyComparison {
   comparison_results!: {
     id: number;
     name: string;
-    description: string;
-    infringement_reason: string;
+    infringement_risk: "high" | "medium" | "low";
+    confidence: number;
+    infringing_claims: number[];
+    infringement_analysis: string;
+    product_to_claim_mapping: string;
   }[];
 
   @Column("json", { nullable: true })

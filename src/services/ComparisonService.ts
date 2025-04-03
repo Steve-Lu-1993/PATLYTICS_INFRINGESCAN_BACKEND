@@ -106,7 +106,7 @@ export class ComparisonService {
                 return { status: 0, message: "patent_not_found" };
             }
 
-            const aiComparison = await this.openAiLMService.getComparisonResult(patent.description,companyProducts)
+            const aiComparison = await this.openAiLMService.getComparisonResult(patent,companyProducts)
             if (aiComparison.status === 0 || aiComparison.data === undefined) {
                 return { status: 0, message: `ai_comparison_failed:${aiComparison.message}` };
             }
